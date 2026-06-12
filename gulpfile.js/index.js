@@ -1,9 +1,10 @@
 const gulp = require("gulp");
+const { watchJs } = require("./jsTasks");
 const series = gulp.series;
-const compileIndex = require("./viewTasks").compileIndex;
-const copyJs = require("./jsTasks").copyJs;
+const viewTasks = require("./viewTasks");
+const jsTasks = require("./jsTasks");
 
-const dev = series(compileIndex, copyJs /*, serve, watchHtml*/);
+const dev = series(viewTasks.compileIndex, jsTasks.copyJs, jsTasks.watchJs, viewTasks.watchIndex /*, serve, watchHtml*/);
 
 module.exports = {
     dev: dev

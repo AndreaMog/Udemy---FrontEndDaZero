@@ -1,14 +1,15 @@
 const gulp = require("gulp");
 const inject = require("gulp-inject");
+const paths = require("./paths");
 
 const compileIndex = function (){
     // 1. Prendiamo il file JavaScript che vogliamo "iniettare" nell'HTML
-    const jsIndex = gulp.src("./src/js/index.js");
-    const utilsIndex = gulp.src("./src/js/utils.js");
-    const modelsIndex = gulp.src("./src/js/models/Wallet.js");
+    const jsIndex = gulp.src(paths.getJsEntryPath());
+    const utilsIndex = gulp.src(paths.getJsSrcPath("/utils.js"));
+    const modelsIndex = gulp.src(paths.getJsSrcPath("/models/Wallet.js"));
 
     // 2. Apriamo il rubinetto sul file HTML originale
-    return gulp.src("./src/index.html")
+    return gulp.src(paths.getHtmlEntryPath())
 
         // 3. Colleghiamo il tubo a "gulp-inject". 
         // Gli passiamo il file JS e gli diciamo: "Cerca il tag con nome 'custom'"
@@ -17,10 +18,16 @@ const compileIndex = function (){
         .pipe(inject(modelsIndex, { relative: true, name: "custom:models" }))
 
         // 4. Mandiamo il risultato finale (l'HTML con il tag inserito) nella cartella ./dist
-        .pipe(gulp.dest("./dist"));
+        .pipe(gulp.dest(paths.getDistFolder()));
+}
+
+const watchIndex = function(cb) {
+    gulp.watch(paths.getHtmlEntryPath(), compileIndex);
+    cb();
 
 }
 
 module.exports = {
-    compileIndex: compileIndex
+    compileIndex: compileIndex,
+    watchIndex: watchIndex
 }
