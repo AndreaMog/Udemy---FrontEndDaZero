@@ -11,7 +11,7 @@ const WalletErrors = Object.freeze({ // Oggetto per definire i tipi di errori ch
 function Wallet(){
 
     let balance = 0;
-    let operations = []; 
+    let operations = [];
 
     // Funzione privata di inizializzazione del wallet, che prende i dati dal localStorage o crea un nuovo wallet se non esiste
     function init() {
