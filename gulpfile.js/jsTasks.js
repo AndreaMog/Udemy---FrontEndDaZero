@@ -1,21 +1,30 @@
 const gulp = require("gulp");
 const paths = require("./paths");
+const browserify = require("browserify");
+const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
 
-const copyJs = function() {
-    const jsIndex = paths.getJsEntryPath();
-    const utilsIndex = paths.getJsSrcPath("/utils.js");
-    const modelsIndex = paths.getJsSrcPath("/models/Wallet.js");
-    return gulp.src([jsIndex, utilsIndex, modelsIndex], { base: paths.getSrcFolder()})
-        .pipe(gulp.dest(paths.getDistFolder()));
+const bundleJs = function() {
+    return browserifyBundle()
+        .pipe(gulp.dest(paths.getJsOutputPath()));
 
 };
 
+const browserifyBundle = function() {
+    return browserify({
+        entries: paths.getJsEntryPath()
+    })
+    .bundle()
+    .pipe(source(paths.getJsOutputEntry()))
+    .pipe(buffer())
+}
+
 const watchJs = function(cb) {
-    gulp.watch(paths.getJsSrcPath("/**/*"), copyJs);
+    gulp.watch(paths.getJsSrcPath("**/*"), bundleJs);
     cb();
 }
 
 module.exports = {
-    copyJs: copyJs,
+    bundleJs: bundleJs,
     watchJs: watchJs
 }

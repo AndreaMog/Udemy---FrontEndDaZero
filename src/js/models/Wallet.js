@@ -1,3 +1,5 @@
+const utilsTasks = require("../utils");
+
 const OperationTypes = Object.freeze({ // Oggetto per definire i tipi di operazioni che possono essere effettuate nel wallet
     OUT: 'OUT', // Tipo di operazione per uscita di denaro
     IN: 'IN' // Tipo di operazione per entrata di denaro
@@ -15,7 +17,7 @@ function Wallet(){
 
     // Funzione privata di inizializzazione del wallet, che prende i dati dal localStorage o crea un nuovo wallet se non esiste
     function init() {
-        const wallet = getWallet(); // Chiama la funzione e prende i dati (nuovi o salvati)
+        const wallet = utilsTasks.getWallet(); // Chiama la funzione e prende i dati (nuovi o salvati)
         balance = wallet.balance; // Imposta il bilancio iniziale del wallet
         operations = wallet.operations; // Imposta le operazioni iniziali
     }
@@ -28,7 +30,7 @@ function Wallet(){
     // Funzioni pubbliche per gestire le operazioni e il bilancio del wallet
     this.addOperation = function(operation) {
 
-        if(!isValidOperation(operation)) { // Controlla se l'operazione è valida, se no esce dalla funzione
+        if(!utilsTasks.isValidOperation(operation)) { // Controlla se l'operazione è valida, se no esce dalla funzione
             throw new Error(WalletErrors.INVALID_OPERATION); // Lancia un errore se l'operazione non è valida
         }
 
@@ -52,7 +54,7 @@ function Wallet(){
 
     this.removeOperation = function(id) { // Il parametro id è l'identificatore dell'operazione da rimuovere, che in questo caso è la data in millisecondi (timestamp) dell'operazione
         
-        const operationIndex = findIndex(operations, function(operation){
+        const operationIndex = utilsTasks.findIndex(operations, function(operation){
             return operation.date === id;
         }); 
 
@@ -98,4 +100,9 @@ function Wallet(){
     // Funzioni invocate che crea una nuova istanza del nostro portafoglio, e inizializza i dati del wallet (bilancio e operazioni) con quelli salvati nel localStorage o con quelli di default se non esistono
     init(); // Inizializza il wallet quando viene creato
 
+}
+
+module.exports = {
+    Wallet: Wallet,
+    WalletErrors: WalletErrors
 }

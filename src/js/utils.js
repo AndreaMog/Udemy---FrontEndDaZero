@@ -28,3 +28,9 @@ function getWallet() { // Funzione per ottenere il wallet dal localStorage, se n
     return JSON.parse(wallet); // Se esiste, restituisci il wallet convertito da JSON
 
 }
+
+module.exports = {
+    getWallet: getWallet,
+    isValidOperation: isValidOperation, 
+    findIndex: findIndex
+}
