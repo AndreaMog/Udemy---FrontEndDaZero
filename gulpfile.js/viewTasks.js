@@ -1,6 +1,8 @@
 const gulp = require("gulp");
 const inject = require("gulp-inject");
 const paths = require("./paths");
+const yargs = require("yargs/yargs");
+const { hideBin } = require("yargs/helpers");
 
 const compileIndex = function (){
     // 1. Prendiamo il file JavaScript che vogliamo "iniettare" nell'HTML
@@ -18,9 +20,15 @@ const compileIndex = function (){
 }
 
 const watchIndex = function(cb) {
+    const args = yargs(hideBin(process.argv)).argv;
+    const prod = args.prod;
+
+    if (prod) {
+        return cb();
+    }
+
     gulp.watch(paths.getHtmlEntryPath(), compileIndex);
     cb();
-
 }
 
 module.exports = {
