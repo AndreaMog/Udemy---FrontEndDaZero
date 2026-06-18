@@ -1,40 +1,37 @@
-(function(context) {
+const Wallet = require("./models/Wallet").Wallet;
 
-    let wallet;
-
-    context.addOperation = function(operation) {
-        try {
-            wallet.addOperation(operation);
-        } catch(e){
-            console.error(e);
-        }
-        
-    };
-
-    context.removeOperation = function(id) {
-
-        try {
-            wallet.removeOperation(id);
-        } catch(e){ // La variabile e sta per error
-            console.error(e);
-        }
-        
+const addOperation = function(operation) {
+    try {
+        wallet.addOperation(operation);
+    } catch(e){
+        console.error(e);
     }
+    
+};
 
-    context.findOperation = function(val) {
-        return wallet.findOperation(val);
+const removeOperation = function(id) {
+
+    try {
+        wallet.removeOperation(id);
+    } catch(e){ // La variabile e sta per error
+        console.error(e);
     }
+    
+}
 
-    context.getBalance = function(){
-        return wallet.getBalance();
-    }
+const findOperation = function(val) {
+    return wallet.findOperation(val);
+}
 
-    context.getOperations = function(){
-        return wallet.getOperations();
-    }
+const getBalance = function(){
+    return wallet.getBalance();
+}
 
-    document.addEventListener('DOMContentLoaded', function(){
-        wallet = new Wallet();
-    });
+const getOperations = function(){
+    return wallet.getOperations();
+}
 
-})(window);
+window.addEventListener('DOMContentLoaded', function(){
+    wallet = new Wallet();
+});
+

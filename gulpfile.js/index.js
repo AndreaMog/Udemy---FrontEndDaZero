@@ -4,13 +4,22 @@ const series = gulp.series;
 const viewTasks = require("./viewTasks");
 const jsTasks = require("./jsTasks");
 const serveTasks = require("./serveTasks");
+const fs = require("fs");
+const paths = require("./paths");
+
+const clean = function(cb) {
+    // Cancella la cartella dist in modo sicuro e nativo
+    fs.rmSync(paths.getDistFolder(), { recursive: true, force: true });
+    cb();
+}
 
 const dev = series(
-        viewTasks.compileIndex, 
-        jsTasks.copyJs, 
-        jsTasks.watchJs, 
-        viewTasks.watchIndex, 
-        serveTasks.serve
+    clean,
+    viewTasks.compileIndex, 
+    jsTasks.bundleJs, 
+    jsTasks.watchJs, 
+    viewTasks.watchIndex, 
+    serveTasks.serve
     );
 
 module.exports = {

@@ -33,5 +33,11 @@ module.exports = {
             return baseJsPath + innerPath;
         }
         return baseJsPath;
+    },
+    getJsOutputPath: function() {
+        return this.getDistFolder() + '/' + paths.js.dist;
+    },
+    getJsOutputEntry: function() {
+        return paths.js.entry;
     }
 }
