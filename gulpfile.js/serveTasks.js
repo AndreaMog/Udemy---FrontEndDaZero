@@ -7,9 +7,10 @@ const serve = function (cb) {
     // 1. Leggiamo i parametri del terminale con la sintassi moderna
     const args = yargs(hideBin(process.argv)).argv;
     const prod = args.prod;
+    const debug = args.debug;
 
     // 2. Se siamo in produzione, eseguiamo subito la callback e usciamo!
-    if (prod) {
+    if (prod && !debug) {
         return cb();
     }
 

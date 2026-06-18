@@ -7,6 +7,7 @@ const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const gulpIf = require("gulp-if");
 const uglify = require("gulp-uglify");
+const sourcemaps = require("gulp-sourcemaps");
 
 const bundleJs = function() {
     return browserifyBundle()
@@ -17,14 +18,23 @@ const browserifyBundle = function() {
     // Generiamo l'oggetto args correttamente leggendo il terminale
     const args = yargs(hideBin(process.argv)).argv;
     const prod = args.prod;
+    const debug = args.debug;
 
     return browserify({
-        entries: paths.getJsEntryPath()
+        entries: paths.getJsEntryPath(),
+        debug: debug === true
     })
     .bundle()
     .pipe(source(paths.getJsOutputEntry()))
     .pipe(buffer())
-    .pipe(gulpIf(prod, uglify()));
+    // Inizializza le sourcemaps leggendo la mappa pre-esistente di Browserify
+    .pipe(gulpIf(debug, sourcemaps.init({ loadMaps: true })))
+    
+    // Se siamo in produzione, minifica il codice
+    .pipe(gulpIf(prod, uglify()))
+    
+    // 🌟 Aggiunto l'ultimo pipe: scrive il file .map nella stessa cartella del JS
+    .pipe(gulpIf(debug, sourcemaps.write("./")));
 }
 
 const watchJs = function(cb) {
