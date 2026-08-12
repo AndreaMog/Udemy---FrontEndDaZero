@@ -20,11 +20,11 @@
   "type": "commonjs",
   "main": "src/js/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --collect-coverage",
+    "test:dev": "npm run test -- --watch",
     "dev": "gulp build --dev",
     "prod": "gulp build --prod",
     "prod:debug": "npm run prod -- --debug"
-
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
@@ -32,6 +32,7 @@
     "del": "^8.0.1",
     "gulp": "^5.0.1",
     "gulp-inject": "^5.0.5",
+    "jest": "^30.4.2",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },

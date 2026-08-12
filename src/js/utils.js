@@ -1,3 +1,5 @@
+const Wallet = require("./models/Wallet");
+
 function findIndex(list, callback){ // Funzione per trovare l'indice di un elemento in una lista che soddisfa una condizione specificata da una callback
     
     for(var i = 0; i < list.length; i++){
@@ -11,7 +13,10 @@ function findIndex(list, callback){ // Funzione per trovare l'indice di un eleme
 }
 
 function isValidOperation(operation) { // Funzione per verificare se un'operazione è valida, controllando se esiste, se ha una descrizione, se l'importo è maggiore di 0 e se il tipo è valido
-    return operation && operation.description && parseFloat(operation.amount) > 0 && typeof OperationTypes[operation.type] !== 'undefined'; // Controlla se l'operazione esiste, se ha una descrizione, se un importo maggiore di 0 e se è un tipo valido
+    return operation && 
+           operation.description && 
+           parseFloat(operation.amount) > 0 && 
+           typeof Wallet.OpType[operation.type] !== 'undefined'; // Controlla se l'operazione esiste, se ha una descrizione, se un importo maggiore di 0 e se è un tipo valido
 }
 
 function getWallet() { // Funzione per ottenere il wallet dal localStorage, se non esiste ne crea uno nuovo con bilancio 0 e nessuna operazione
