@@ -1,14 +1,5 @@
 const utilsTasks = require("../utils");
-
-const OperationTypes = Object.freeze({ // Oggetto per definire i tipi di operazioni che possono essere effettuate nel wallet
-    OUT: 'OUT', // Tipo di operazione per uscita di denaro
-    IN: 'IN' // Tipo di operazione per entrata di denaro
-});
-
-const WalletErrors = Object.freeze({ // Oggetto per definire i tipi di errori che possono verificarsi nel wallet
-    INVALID_OPERATION: 'INVALID_OPERATION',
-    OPERATION_NOT_FOUND: 'OPERATION_NOT_FOUND'
-});
+const WalletEnums = require("./enums");
 
 function Wallet(){
 
@@ -31,19 +22,21 @@ function Wallet(){
     this.addOperation = function(operation) {
 
         if(!utilsTasks.isValidOperation(operation)) { // Controlla se l'operazione è valida, se no esce dalla funzione
-            throw new Error(WalletErrors.INVALID_OPERATION); // Lancia un errore se l'operazione non è valida
+            throw new Error(WalletEnums.WalletErrors.INVALID_OPERATION); // Lancia un errore se l'operazione non è valida
         }
 
         const newOperation = {
+            id: new Date().getTime(),
             amount: parseFloat(operation.amount), // Converte l'importo in un numero decimale
             description: operation.description.trim(), // Prende la descrizione dell'operazione
             type: operation.type, // Prende il tipo dell'operazione (IN o OUT)
             date: new Date().getTime() // Aggiunge la data corrente in millisecondi 
         }  
+        
 
-        if(newOperation.type === OperationTypes.IN) { // Se l'operazione è di tipo IN, aggiungi l'importo al bilancio
+        if(newOperation.type === WalletEnums.OpType.IN) { // Se l'operazione è di tipo IN, aggiungi l'importo al bilancio
             balance += newOperation.amount; // Aggiunge l'importo al bilancio
-        } else if (newOperation.type === OperationTypes.OUT) { // Se l'operazione è di tipo OUT, sottrai l'importo dal bilancio
+        } else if (newOperation.type === WalletEnums.OpType.OUT) { // Se l'operazione è di tipo OUT, sottrai l'importo dal bilancio
             balance -= newOperation.amount; // Sottrae l'importo dal bilancio
         }
 
@@ -59,13 +52,13 @@ function Wallet(){
         }); 
 
         if(operationIndex === -1) { // Verifica se l'operazione da rimuovere è stata trovata, se no lancia un errore
-            throw new Error(WalletErrors.OPERATION_NOT_FOUND); // Lancia un errore se l'operazione non è stata trovata
+            throw new Error(WalletEnums.WalletErrors.OPERATION_NOT_FOUND); // Lancia un errore se l'operazione non è stata trovata
         }
 
         const operation = operations[operationIndex]; // Salva l'operazione trovata in una variabile per poterla utilizzare dopo 
-        if(operation.type == OperationTypes.IN){ // Verifica il tipo dell'operazione da rimuovere, se è di tipo IN, sottrai l'importo dal bilancio per annullare l'effetto dell'operazione
+        if(operation.type == WalletEnums.OpType.IN){ // Verifica il tipo dell'operazione da rimuovere, se è di tipo IN, sottrai l'importo dal bilancio per annullare l'effetto dell'operazione
             balance -= operation.amount; // Rimuove l'importo dal bilancio
-        } else if(operation.type == OperationTypes.OUT){ //Verifica se è di tipo OUT, aggiungi l'importo al bilancio per annullare l'effetto dell'operazione
+        } else if(operation.type == WalletEnums.OpType.OUT){ //Verifica se è di tipo OUT, aggiungi l'importo al bilancio per annullare l'effetto dell'operazione
             balance += operation.amount; // Aggiunge l'importo al bilancio
         }
 
@@ -103,6 +96,5 @@ function Wallet(){
 }
 
 module.exports = {
-    Wallet: Wallet,
-    WalletErrors: WalletErrors
+    Wallet: Wallet
 }
