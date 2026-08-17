@@ -26,6 +26,7 @@ function Wallet(){
         }
 
         const newOperation = {
+            id: new Date().getTime(),
             amount: parseFloat(operation.amount), // Converte l'importo in un numero decimale
             description: operation.description.trim(), // Prende la descrizione dell'operazione
             type: operation.type, // Prende il tipo dell'operazione (IN o OUT)
