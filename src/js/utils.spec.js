@@ -1,5 +1,6 @@
 const utils = require("./utils");
 const Wallet = require("./models/Wallet");
+const mockedStructure = require("../../jest/mockedStructure");
 
 // SIMULAZIONE (MOCK) DI LOCALSTORAGE PER NODE
 global.localStorage = {
@@ -31,33 +32,17 @@ describe("Utils testing suite", function() {
     });
 
     it("isValidOperation returns true if operation is valid", function(){
-        const operation = { 
-            description: "Salary",
-            amount: 1000,
-            type: Wallet.OpType.IN
-        }
-        expect(utils.isValidOperation(operation)).toBeTruthy();
+        expect(utils.isValidOperation(mockedStructure.incomeOperation)).toBeTruthy();
     });
 
     it("isValidOperation returns false if operation is not valid", function(){
-        const operation = { 
-            description: "Salary",
-            amount: 0,
-            type: Wallet.OpType.IN
-        }
-        expect(utils.isValidOperation(operation)).toBeFalsy();
+        expect(utils.isValidOperation(mockedStructure.invalidOperation)).toBeFalsy();
     });
 
     it("getWallet returns correct wallet if it extists in the local storage", function(){
-        
-        const operation = { 
-            description: "Salary",
-            amount: 1000,
-            type: Wallet.OpType.IN
-        }
         const wallet = {
             balance: 1000,
-            operations: [operation]
+            operations: [mockedStructure.incomeOperation]
         }
         localStorage.getItem.mockReturnValue(JSON.stringify(wallet)); // 1. Diciamo al mock di restituire il nostro wallet convertito in stringa JSON
         expect(utils.getWallet()).toEqual(wallet);

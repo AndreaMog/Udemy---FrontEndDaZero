@@ -1,4 +1,4 @@
-const Wallet = require("./models/Wallet");
+const WalletEnums = require("./models/enums");
 
 function findIndex(list, callback){ // Funzione per trovare l'indice di un elemento in una lista che soddisfa una condizione specificata da una callback
     
@@ -16,7 +16,7 @@ function isValidOperation(operation) { // Funzione per verificare se un'operazio
     return operation && 
            operation.description && 
            parseFloat(operation.amount) > 0 && 
-           typeof Wallet.OpType[operation.type] !== 'undefined'; // Controlla se l'operazione esiste, se ha una descrizione, se un importo maggiore di 0 e se è un tipo valido
+           typeof WalletEnums.OpType[operation.type] !== 'undefined'; // Controlla se l'operazione esiste, se ha una descrizione, se un importo maggiore di 0 e se è un tipo valido
 }
 
 function getWallet() { // Funzione per ottenere il wallet dal localStorage, se non esiste ne crea uno nuovo con bilancio 0 e nessuna operazione
